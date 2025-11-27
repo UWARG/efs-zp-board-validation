@@ -6,28 +6,41 @@
  */
 #include "test.h"
 
+
+void enableServo(SPI_HandleTypeDef *hspi, gpio *cs, gpio *servoEn, uint8_t bm) {
+  HAL_GPIO_WritePin(servoEn->gpioGroup, servoEn->gpioPin, GPIO_PIN_SET);
+
+  uint8_t rx[2], tx[2];
+  tx[0] = bm;
+  tx[1] = 0xAC;
+
+  HAL_GPIO_WritePin(cs->gpioGroup, cs->gpioPin, GPIO_PIN_RESET);
+  HAL_SPI_TransmitReceive(hspi, tx, rx, 2, HAL_MAX_DELAY);
+  HAL_GPIO_WritePin(cs->gpioGroup, cs->gpioPin, GPIO_PIN_SET);
+}
+
 void testTIM(TIM_HandleTypeDef *htim, uint32_t channel, float compare) {
   __HAL_TIM_SET_COMPARE(htim, channel, __HAL_TIM_GET_AUTORELOAD(htim) * compare);
   HAL_TIM_PWM_Start(htim, channel);
   HAL_TIM_PWM_Stop(htim, channel);
 }
 
-void testTimers() {
-  testTIM(&htim1, TIM_CHANNEL_1, 0.05);
-  testTIM(&htim1, TIM_CHANNEL_2, 0.10);
-  testTIM(&htim1, TIM_CHANNEL_3, 0.05);
-  testTIM(&htim1, TIM_CHANNEL_4, 0.10);
+void testTimers(TIM_HandleTypeDef *htim1, TIM_HandleTypeDef *htim2, TIM_HandleTypeDef *htim3, TIM_HandleTypeDef *htim16, TIM_HandleTypeDef *htim17) {
+  testTIM(htim1, TIM_CHANNEL_1, 0.05);
+  testTIM(htim1, TIM_CHANNEL_2, 0.10);
+  testTIM(htim1, TIM_CHANNEL_3, 0.05);
+  testTIM(htim1, TIM_CHANNEL_4, 0.10);
 
-  testTIM(&htim2, TIM_CHANNEL_1, 0.05);
-  testTIM(&htim2, TIM_CHANNEL_2, 0.10);
-  testTIM(&htim2, TIM_CHANNEL_3, 0.15);
-  testTIM(&htim2, TIM_CHANNEL_4, 0.20);
+  testTIM(htim2, TIM_CHANNEL_1, 0.05);
+  testTIM(htim2, TIM_CHANNEL_2, 0.10);
+  testTIM(htim2, TIM_CHANNEL_3, 0.15);
+  testTIM(htim2, TIM_CHANNEL_4, 0.20);
 
-  testTIM(&htim3, TIM_CHANNEL_3, 0.05);
-  testTIM(&htim3, TIM_CHANNEL_4, 0.10);
+  testTIM(htim3, TIM_CHANNEL_3, 0.05);
+  testTIM(htim3, TIM_CHANNEL_4, 0.10);
 
-  testTIM(&htim16, TIM_CHANNEL_1, 0.05);
-  testTIM(&htim17, TIM_CHANNEL_1, 0.10);
+  testTIM(htim16, TIM_CHANNEL_1, 0.05);
+  testTIM(htim17, TIM_CHANNEL_1, 0.10);
 
 }
 // Generic Chip Select control for any SPI + NSS pin

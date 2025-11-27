@@ -1,0 +1,8 @@
+../Core/Src/test.c:10:6:enableServo	1
+../Core/Src/test.c:22:6:testTIM	6
+../Core/Src/test.c:28:6:testTimers	1
+../Core/Src/test.c:47:6:CS	1
+../Core/Src/test.c:52:6:testSPI	1
+../Core/Src/test.c:68:6:testI2CTx	1
+../Core/Src/test.c:73:6:testI2CRx	1
+../Core/Src/test.c:81:6:testUART	1
